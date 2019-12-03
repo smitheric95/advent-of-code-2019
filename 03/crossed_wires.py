@@ -29,36 +29,33 @@ class CrossedWires:
                     
                     direction = loc[0]
                     length = int(loc[1:])
-                    
-                    print(cur_x, cur_y)
 
                     if direction == 'U':
-                        if cur_y == self.origin[1]:
+                        if cur_y == self.origin[0]:
                             cur_y -= 1
 
-                        self.graph.iloc[cur_y-length:cur_y, cur_x] += 1
-                        cur_y -= length
+                        self.graph.iloc[cur_y-length+1:cur_y+1, cur_x] += 1
+                        cur_y -= length-1
                     elif direction == 'D':
-                        if cur_y == self.origin[1]:
+                        if cur_y == self.origin[0]:
                             cur_y += 1
-                        
-                        # bug
-                        self.graph.iloc[cur_y:cur_y+length, cur_x] += 1
-                        cur_y += length-1
+
+                        self.graph.iloc[cur_y+1:cur_y+length+1, cur_x] += 1
+                        cur_y += length
                     elif direction == 'R':
-                        if cur_x == self.origin[0]:
+                        if cur_x == self.origin[1]:
                             cur_x += 1
                             
-                        self.graph.iloc[cur_y, cur_x+1:cur_x+length+1] += 1
-                        cur_x += length
+                        self.graph.iloc[cur_y, cur_x:cur_x+length] += 1
+                        cur_x += length-1
                     elif direction == 'L':
-                        if cur_x == self.origin[0]:
+                        if cur_x == self.origin[1]:
                             cur_x -= 1
 
                         self.graph.iloc[cur_y, cur_x-length:cur_x] += 1
-                        cur_x -= length+1
-                    
-                    # print(self.graph)
+                        cur_x -= length
+
+                    print(cur_x, cur_y)
 
     def find_intersections(self):
         if 1 > 0:
@@ -73,7 +70,7 @@ if __name__ == "__main__":
 
     print(my_graph.graph)
     print("---------------")
-    my_graph.lay_wires('03/input2.csv')
+    my_graph.lay_wires('input2.csv')
     print(my_graph.graph)
 
 """
