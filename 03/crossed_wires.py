@@ -1,5 +1,6 @@
 import math
 import csv 
+import pandas as pd
 
 def manhattan_distance(x,y):
     return sum(abs(a-b) for a,b in zip(x,y))
@@ -12,18 +13,22 @@ def manhattan_distance(x,y):
 class CrossedWires:
     def __init__(self, x, y, org_x, org_y):
         # store origin at center
-        self.graph = [[(0,0) for _ in range(y)] for _ in range(x)]
+        self.graph = pd.DataFrame([[[0,0] for _ in range(y)] for _ in range(x)])
         self.origin = (org_x, org_y)
         self.closest_intersection = None
 
-    def __str__(self):
-        print(self.graph)
+    def print_grid(self):
+        print("-------------------------")
+        for row in self.graph:
+            print(row)
+        print("-------------------------")
 
     def lay_wires(self, file_name):
         with open(file_name) as f:
             csv_file = csv.reader(f)
 
             for i, wire in enumerate(csv_file):
+                print(i)
                 for loc in wire:
                     direction = loc[0]
                     length = int(loc[1:])
@@ -32,13 +37,15 @@ class CrossedWires:
                     cur_y = self.origin[0]
 
                     if direction == 'U':
-                        self.graph[cur_y:cur_y+length][cur_x][i] = 1
+                        self.graph.iloc[cur_y:cur_y+length][cur_x][i] = 1
                     elif direction == 'D':
-                        self.graph[cur_y-length:cur_y][cur_x][i] = 1
+                        self.graph.iloc[cur_y-length:cur_y][cur_x][i] = 1
                     elif direction == 'R':
-                        self.graph[cur_y][cur_x:cur_x+length][i] = 1
+                        self.graph.iloc[cur_y][cur_x:cur_x+length][i] = 1
                     elif direction == 'L':
-                        self.graph[cur_y][cur_x-length:cur_x][i] = 1
+                        self.graph.iloc[cur_y][cur_x-length:cur_x][i] = 1
+
+                    # self.print_grid()
 
     def find_intersections(self):
         if 1 > 0:
@@ -48,5 +55,7 @@ class CrossedWires:
             pass
 
 if __name__ == "__main__":
-    my_graph = CrossedWires(10,11, 1, 1)
-    my_graph.lay_wires('input2.csv')
+    my_graph = CrossedWires(10,11, 0, 9)
+    my_graph.graph.iloc[9][0] = [2,2]
+    print(my_graph.graph)
+    # my_graph.lay_wires('input2.csv')
