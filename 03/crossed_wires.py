@@ -33,17 +33,31 @@ class CrossedWires:
                     print(cur_x, cur_y)
 
                     if direction == 'U':
+                        if cur_y == self.origin[1]:
+                            cur_y -= 1
+
                         self.graph.iloc[cur_y-length:cur_y, cur_x] += 1
                         cur_y -= length
                     elif direction == 'D':
-                        self.graph.iloc[cur_y:cur_y+length+1, cur_x] += 1
-                        cur_y += length+1
+                        if cur_y == self.origin[1]:
+                            cur_y += 1
+                        
+                        # bug
+                        self.graph.iloc[cur_y:cur_y+length, cur_x] += 1
+                        cur_y += length-1
                     elif direction == 'R':
+                        if cur_x == self.origin[0]:
+                            cur_x += 1
+                            
                         self.graph.iloc[cur_y, cur_x+1:cur_x+length+1] += 1
                         cur_x += length
                     elif direction == 'L':
+                        if cur_x == self.origin[0]:
+                            cur_x -= 1
+
                         self.graph.iloc[cur_y, cur_x-length:cur_x] += 1
                         cur_x -= length+1
+                    
                     # print(self.graph)
 
     def find_intersections(self):
