@@ -12,16 +12,10 @@ def manhattan_distance(x,y):
 
 class CrossedWires:
     def __init__(self, x, y, org_x, org_y):
-        # store origin at center
-        self.graph = pd.DataFrame([[[0,0] for _ in range(y)] for _ in range(x)])
+        self.graph = pd.DataFrame([[0 for _ in range(y)] for _ in range(x)])
         self.origin = (org_x, org_y)
+        self.graph.iloc[org_y][org_x] = -1
         self.closest_intersection = None
-
-    def print_grid(self):
-        print("-------------------------")
-        for row in self.graph:
-            print(row)
-        print("-------------------------")
 
     def lay_wires(self, file_name):
         with open(file_name) as f:
@@ -37,13 +31,13 @@ class CrossedWires:
                     cur_y = self.origin[0]
 
                     if direction == 'U':
-                        self.graph.iloc[cur_y:cur_y+length][cur_x][i] = 1
+                        self.graph[self.graph.iloc[cur_y:cur_y+length][cur_x][i]] = 1
                     elif direction == 'D':
-                        self.graph.iloc[cur_y-length:cur_y][cur_x][i] = 1
+                        self.graph[self.graph.iloc[cur_y-length:cur_y][cur_x][i]] = 1
                     elif direction == 'R':
-                        self.graph.iloc[cur_y][cur_x:cur_x+length][i] = 1
+                        self.graph[self.graph.iloc[cur_y][cur_x:cur_x+length][i]] = 1
                     elif direction == 'L':
-                        self.graph.iloc[cur_y][cur_x-length:cur_x][i] = 1
+                        self.graph[self.graph.iloc[cur_y][cur_x-length:cur_x][i]] = 1
 
                     # self.print_grid()
 
@@ -56,6 +50,9 @@ class CrossedWires:
 
 if __name__ == "__main__":
     my_graph = CrossedWires(10,11, 0, 9)
-    my_graph.graph.iloc[9][0] = [2,2]
+    my_graph.graph.iloc[0:5, 0] += 1
+    # for col in my_graph.graph[0:5]:
+    #     my_graph.graph.loc[0, col] = [5,5]
+
     print(my_graph.graph)
-    # my_graph.lay_wires('input2.csv')
+    # my_graph.lay_wires('03/input2.csv')
