@@ -29,31 +29,23 @@ class CrossedWires:
                     length = int(loc[1:])
 
                     if direction == 'U':
-                        if cur_y == self.origin[0]:
-                            cur_y -= 1
+                        self.graph.iloc[cur_y-length:cur_y, cur_x] += increment_value
+                        cur_y -= length
 
-                        self.graph.iloc[cur_y-length+1:cur_y+1, cur_x] += increment_value
-                        cur_y -= length-1
                     elif direction == 'D':
-                        if cur_y == self.origin[0]:
-                            cur_y += 1
-
                         self.graph.iloc[cur_y+1:cur_y+length+1, cur_x] += increment_value
                         cur_y += length
-                    elif direction == 'R':
-                        if cur_x == self.origin[1]:
-                            cur_x += 1
-                            
-                        self.graph.iloc[cur_y, cur_x:cur_x+length] += increment_value
-                        cur_x += length-1
-                    elif direction == 'L':
-                        if cur_x == self.origin[1]:
-                            cur_x -= 1
 
+                    elif direction == 'R':
+                        self.graph.iloc[cur_y, cur_x+1:cur_x+length+1] += increment_value
+                        cur_x += length
+
+                    elif direction == 'L':
                         self.graph.iloc[cur_y, cur_x-length:cur_x] += increment_value
                         cur_x -= length
 
                 increment_value += 99
+
 
     def shortest_intersection(self):
         intersections = []
@@ -70,24 +62,18 @@ class CrossedWires:
             if cur < min:
                 min = cur
 
-        print(intersections)
         return min
 
+    # should be static
     def manhattan_distance(self, x, y):
         return sum(abs(a - b) for a, b in zip(x, y))
 
 if __name__ == "__main__":
-    my_graph = CrossedWires(1000, 1000, 500, 500)
-    # my_graph = CrossedWires(10, 11, 1, 8)
+    """
+    R8,U5,L5,D3
+    U7,R6,D4,L4
+    """
+    my_graph = CrossedWires(20000, 20000, 10000, 10000)
+    my_graph.lay_wires('input1.csv')
 
-    # print(my_graph.graph)
-    # print("---------------")
-    my_graph.lay_wires('input2.csv')
-    # print(my_graph.graph)
-    print("---------------")
     print(my_graph.shortest_intersection())
-
-"""
-R8,U5,L5,D3
-U7,R6,D4,L4
-"""
